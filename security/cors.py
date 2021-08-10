@@ -1,6 +1,7 @@
 import re
 import os
 
+# TODO: Configurable URL
 def write_headers(origin):
     cors_allowed = os.environ.get('CORS_ALLOWED', "NO")
     if(cors_allowed == "YES" or (origin and re.match(r"https:\/\/.*\.matheusgirardin\.com", origin))):

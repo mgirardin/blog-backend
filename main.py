@@ -1,5 +1,5 @@
 import json 
-from helper import cors
+from security import cors
 from controllers.ArticleController import ArticleController, ArticlesController
 from controllers.AdminController import EmployeeSigninController, EmployeeRefreshController
 from controllers.SubscriberController import SubscriberController
@@ -9,8 +9,8 @@ DEFAULT_HEADERS = {
     "content-type" : "application/json",
 }
 
-def defined_routers():
-    routers = {
+def routes():
+    routes = {
         "/article" : ArticleController,
         "/articles" : ArticlesController,
         "/contact": ContactController,
@@ -18,7 +18,7 @@ def defined_routers():
         "/subscribe": SubscriberController,
         "/refresh": EmployeeRefreshController
     }
-    return routers
+    return routes
 
 def router(request):
     if request.method == 'OPTIONS':
@@ -26,9 +26,9 @@ def router(request):
         if(allowed):
             return ('', 204, headers)
         return ('', 403, headers)
-    if(request.path not in defined_routers()):
+    if(request.path not in routes()):
         return json.dumps({"error" : "Path {} not Found".format(request.path)}),404,DEFAULT_HEADERS
-    tmp_router = defined_routers()[request.path]
+    tmp_router = routes()[request.path]
     tmp_object = tmp_router()
     response = {}
     if(request.method.lower() not in dir(tmp_object)):

@@ -1,20 +1,12 @@
 import os
 import json
+import http_response
 from flask import Response
 from datetime import datetime
-from helper.authentication import create_employee_access_token
-from helper.authentication import check_password, generate_salt, generate_password_hash
-from helper.authentication import create_employee_refresh_token, validate_employee_refresh_token
+from security.authentication import create_employee_access_token
+from security.authentication import check_password, generate_salt, generate_password_hash
+from security.authentication import create_employee_refresh_token, validate_employee_refresh_token
 from dal import User
-
-
-DEFAULT_HEADERS = {
-    "content-type" : "application/json",
-}
-PERMISSION_DENIED = json.dumps({"status": "error", "error" : "PermissionDenied"}),401,DEFAULT_HEADERS
-NOT_AUTHORIZED = json.dumps({"status": "error", "error" : "WrongCredentials"}),401,DEFAULT_HEADERS
-DEFAULT_RESPONSE = json.dumps({"status" : "success"}),200,DEFAULT_HEADERS
-MISSING_PARAMETER = json.dumps({"status": "error", "error" : "MissingParameter"}),401,DEFAULT_HEADERS
 
 class EmployeeSignup(object):
     def verify_password_strength(self, password):

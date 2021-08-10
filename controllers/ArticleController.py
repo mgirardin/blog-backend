@@ -1,14 +1,7 @@
 import os
 import json
+import http_response
 from dal import Article
-
-DEFAULT_HEADERS = {
-    "content-type" : "application/json",
-}
-PERMISSION_DENIED = json.dumps({"status": "error", "error" : "PermissionDenied"}),401,DEFAULT_HEADERS
-NOT_AUTHORIZED = json.dumps({"status": "error", "error" : "WrongCredentials"}),401,DEFAULT_HEADERS
-DEFAULT_RESPONSE = json.dumps({"status" : "success"}),200,DEFAULT_HEADERS
-MISSING_PARAMETER = json.dumps({"status": "error", "error" : "MissingParameter"}),200,DEFAULT_HEADERS
 
 class ArticleController(object):
     def get(self, request):
@@ -29,7 +22,7 @@ class ArticleController(object):
     def post(self, request):
         payload = request.get_json()
         needed_parameters = ["title", "subtitle", "body", "main_image", "author_name",
-                             "author_picture", "category", "tags", "time_to_read"]
+            "author_picture", "category", "tags", "time_to_read"]
         if(not all(elem in payload for elem in needed_parameters)):
             return MISSING_PARAMETER
 
