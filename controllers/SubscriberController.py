@@ -1,6 +1,7 @@
 import json
 from constants import http_response
-from dal import Subscriber
+from dal.subscriber_dao import SubscriberDao
+from messages.subscriber import Subscriber
 from security.recaptcha import handle_captcha_token
 
 class SubscriberController(object):
@@ -15,7 +16,8 @@ class SubscriberController(object):
             return json.dumps({"status": "error", "error" : "CaptchaNotAllowed"}), 200, http_response.DEFAULT_HEADERS
         email = payload["email"]
         try:
-            Subscriber.create(email)
+            subscriber = Subscriber(email)
+            SubscriberDao.create(subscriber)
         except Exception as e:
             print(e)
             return json.dumps({"status": "error"}), 500, http_response.DEFAULT_HEADERS

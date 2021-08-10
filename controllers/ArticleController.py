@@ -1,6 +1,9 @@
 import json
+from datetime import datetime
+from messages.article_content import ArticleContent
+from messages.article import Article
 from constants import http_response
-from dal import ArticleDao
+from dal.article_dao import ArticleDao
 
 class ArticleController(object):
     def get(self, request):
@@ -29,30 +32,24 @@ class ArticleController(object):
         subtitle = payload["subtitle"]
         body = payload["body"]
         main_image = payload["main_image"] 
-        post = {
-            "title": title,
-            "subtitle": subtitle,
-            "body": body,
-            "main_image": main_image
-        }
-
         author_name = payload["author_name"]
         author_picture = payload["author_picture"]
-        
-        author = {
-            "name": author_name,
-            "picture": author_picture
-        }
         category = payload["category"]
         tags = payload["tags"]      
         time_to_read = payload["time_to_read"]
 
-        metadata = {
-            "category": category,
-            "tags": tags,
-            "time_to_read": time_to_read
-        }
-        ArticleDao.create(post, author, metadata)
+        article: Article = Article(
+            ArticleContent(title, subtitle, body, main_image),
+            author_name,
+            author_picture,
+            category,
+            tags,
+            time_to_read,
+            [],
+            datetime.now(),
+            0
+        )
+        ArticleDao.create(article)
         return json.dumps({"status": "ok"}), 200, http_response.DEFAULT_HEADERS
 
 class ArticlesController(object):

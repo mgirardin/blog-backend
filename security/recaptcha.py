@@ -1,9 +1,10 @@
 import requests
 import os
 
+RECAPTCHA_KEY = os.environ.get('RECAPTCHA_KEY', "")
+GOOGLE_RECAPTCHA_URL = "https://www.google.com/recaptcha/api/siteverify"
+
 def handle_captcha_token(response):
-    RECAPTCHA_KEY = os.environ.get('RECAPTCHA_KEY', "")
-    GOOGLE_RECAPTCHA_URL = "https://www.google.com/recaptcha/api/siteverify"
     #TODO: Send user IP
     data = {"secret": RECAPTCHA_KEY, "response": response}
     ans = requests.post(GOOGLE_RECAPTCHA_URL, data=data)
