@@ -1,7 +1,9 @@
-import jwt
 import os
-import bcrypt
 from datetime import datetime, timedelta
+
+import bcrypt
+import jwt
+
 
 def create_employee_access_token(user_id):
      return jwt.encode({'user': str(user_id), 'type': 'access_token',

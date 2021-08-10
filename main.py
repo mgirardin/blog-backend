@@ -1,41 +1,56 @@
-import json 
-import constants.http_response
+import json
+
+from constants import http_response as http
+from controllers.admin_controller import (
+    EmployeeRefreshController,
+    EmployeeSigninController,
+)
+from controllers.article_controller import ArticleController, ArticlesController
+from controllers.contact_controller import ContactController
+from controllers.subscriber_controller import SubscriberController
 from security import cors
-from controllers.ArticleController import ArticleController, ArticlesController
-from controllers.AdminController import EmployeeSigninController, EmployeeRefreshController
-from controllers.SubscriberController import SubscriberController
-from controllers.ContactController import ContactController
+
 
 def routes():
     routes = {
-        "/article" : ArticleController,
-        "/articles" : ArticlesController,
+        "/article": ArticleController,
+        "/articles": ArticlesController,
         "/contact": ContactController,
         "/signin": EmployeeSigninController,
         "/subscribe": SubscriberController,
-        "/refresh": EmployeeRefreshController
+        "/refresh": EmployeeRefreshController,
     }
     return routes
 
+
 def router(request):
-    if request.method == 'OPTIONS':
-        headers, allowed = cors.write_headers(request.headers.get("origin"))
-        if(allowed):
-            return ('', 204, headers)
-        return ('', 403, headers)
-    if(request.path not in routes()):
-        return json.dumps({"error" : "Path {} not Found".format(request.path)}),404,DEFAULT_HEADERS
-    tmp_router = routes()[request.path]
-    tmp_object = tmp_router()
-    response = {}
-    if(request.method.lower() not in dir(tmp_object)):
-        return json.dumps({"error" : "MethodNotAllowed"}),405,DEFAULT_HEADERS
-    if(request.method.upper() == "GET"):
-        response, status, headers = tmp_object.get(request)
-    elif(request.method.upper() == "POST"):
-        response, status, headers = tmp_object.post(request)
+    if request.method == "OPTIONS":
+        _handle_options_request(request)
+    if request.path not in routes():
+        return (
+            json.dumps({"error": "Path {} not Found".format(request.path)}),
+            404,
+            http.DEFAULT_HEADERS,
+        )
+
+    route = routes()[request.path]
+    controller = route()
+    if request.method.lower() not in dir(controller):
+        return http.METHOD_NOT_ALLOWED
+    if request.method.upper() == "GET":
+        response, status, headers = controller.get(request)
+    elif request.method.upper() == "POST":
+        response, status, headers = controller.post(request)
     else:
-        return json.dumps({ "error" : "MethodNotAllowed"}),405,DEFAULT_HEADERS
+        return http.METHOD_NOT_ALLOWED
+
     cors_headers, _ = cors.write_headers(request.headers.get("origin"))
     headers.update(cors_headers)
     return response, status, headers
+
+
+def _handle_options_request(request):
+    headers, allowed = cors.write_headers(request.headers.get("origin"))
+    if allowed:
+        return ("", 204, headers)
+    return ("", 403, headers)
