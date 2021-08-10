@@ -1,3 +1,5 @@
+import json
+
 DEFAULT_HEADERS = { "content-type" : "application/json" }
 
 PERMISSION_DENIED = json.dumps({"status": "error", "error" : "PermissionDenied"}), 401, DEFAULT_HEADERS
