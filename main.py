@@ -1,7 +1,7 @@
 import json 
 from helper import cors
 from controllers.ArticleController import ArticleController, ArticlesController
-from controllers.AdminController import EmployeeSignin, EmployeeRefreshController
+from controllers.AdminController import EmployeeSigninController, EmployeeRefreshController
 from controllers.SubscriberController import SubscriberController
 from controllers.ContactController import ContactController
 
@@ -14,7 +14,7 @@ def defined_routers():
         "/article" : ArticleController,
         "/articles" : ArticlesController,
         "/contact": ContactController,
-        "/signin": EmployeeSignin,
+        "/signin": EmployeeSigninController,
         "/subscribe": SubscriberController,
         "/refresh": EmployeeRefreshController
     }

@@ -18,14 +18,15 @@ MISSING_PARAMETER = json.dumps({"status": "error", "error" : "MissingParameter"}
 
 class EmployeeSignup(object):
     def verify_password_strength(self, password):
-        rules = [lambda s: any(x.isupper() for x in s), # must have at least one uppercase
-                lambda s: any(x.islower() for x in s),  # must have at least one lowercase
-                lambda s: any(x.isdigit() for x in s),  # must have at least one digit
-                lambda s: len(s) >= 8                   # must be at least 7 characters
+        rules = [
+            lambda s: any(x.isupper() for x in s),  # must have at least one uppercase
+            lambda s: any(x.islower() for x in s),  # must have at least one lowercase
+            lambda s: any(x.isdigit() for x in s),  # must have at least one digit
+            lambda s: len(s) >= 8                   # must be at least 7 characters
         ]
         return all(rule(password) for rule in rules)
 
-class EmployeeSignin(object):
+class EmployeeSigninController(object):
     def post(self, request):
         payload = request.get_json()
         needed_parameters = ["login", "passwd"]
