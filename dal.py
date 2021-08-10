@@ -46,15 +46,6 @@ class ArticleDao:
             articles.append(doc.to_dict())
         return articles
 
-class User:
-    @staticmethod
-    def get(login: str):
-        kind = 'users'
-        query_ref = client.collection(kind).where("login", "==", login).limit(1)
-        for doc in query_ref.stream():
-            user = doc.to_dict()
-        return user
-
 class Subscriber:
     @staticmethod
     def create(email: str):

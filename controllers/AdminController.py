@@ -1,11 +1,10 @@
 import json
 from constants import http_response
 from flask import Response
-from datetime import datetime
 from security.authentication import create_employee_access_token
-from security.authentication import check_password, generate_salt, generate_password_hash
+from security.authentication import check_password
 from security.authentication import create_employee_refresh_token, validate_employee_refresh_token
-from dal import User
+from dal.user_dao import UserDao
 
 class EmployeeSignup(object):
     def verify_password_strength(self, password):
@@ -25,14 +24,14 @@ class EmployeeSigninController(object):
             return http_response.MISSING_PARAMETER
         login = payload["login"]
         passwd = payload["passwd"]
-        user = User.get(login)
-        if((not user) or (not check_password(passwd, user["salt"], user["passwd"]))):
+        user = UserDao.get(login)
+        if((not user) or (not check_password(passwd, user.salt, user.passwd))):
             return http_response.NOT_AUTHORIZED
-        encoded_jwt = create_employee_access_token(user["login"])
+        encoded_jwt = create_employee_access_token(user.login)
         json_response = json.dumps({"status" : "success", "jwt": encoded_jwt.decode()})
         resp = Response(json_response)
-        resp.set_cookie("refresh_token", value = create_employee_refresh_token(user["login"]), httponly = True, 
-                        secure = True, domain=".matheusgirardin.com", samesite='Lax', max_age=24*60*60)
+        resp.set_cookie("refresh_token", value = create_employee_refresh_token(user.login), httponly = True, 
+            secure = True, domain=".matheusgirardin.com", samesite='Lax', max_age=24*60*60)
         return resp, 200, http_response.DEFAULT_HEADERS
 
 class EmployeeRefreshController(object):

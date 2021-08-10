@@ -4,7 +4,7 @@ client = firestore.Client()
 
 class ContactDao:
     @staticmethod
-    def create(contact: Contact):
+    def create(contact: Contact) -> None:
         try:
             kind = 'contacts'
             doc = client.collection(kind).document()
