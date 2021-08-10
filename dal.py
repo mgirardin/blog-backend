@@ -2,7 +2,7 @@ from google.cloud import firestore
 from datetime import datetime
 client = firestore.Client()
 
-class Article:
+class ArticleDao:
     @staticmethod
     def create(post, author, metadata):
         try:
@@ -48,7 +48,7 @@ class Article:
 
 class User:
     @staticmethod
-    def get(login):
+    def get(login: str):
         kind = 'users'
         query_ref = client.collection(kind).where("login", "==", login).limit(1)
         for doc in query_ref.stream():
@@ -57,28 +57,12 @@ class User:
 
 class Subscriber:
     @staticmethod
-    def create(email):
+    def create(email: str):
         try:
             kind = 'subscribers'
             doc = client.collection(kind).document()
             doc.set({
                 'email': email
-            })
-        except Exception as e:
-            print(e)
-            
-class Contact:
-    @staticmethod
-    def create(first_name, last_name, email, number, message):
-        try:
-            kind = 'contacts'
-            doc = client.collection(kind).document()
-            doc.set({
-                'first_name': first_name,
-                'last_name': last_name,
-                'email': email,
-                'number': number,
-                'message': message
             })
         except Exception as e:
             print(e)

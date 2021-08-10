@@ -1,6 +1,5 @@
-import os
 import json
-import constants.http_response
+from constants import http_response
 from flask import Response
 from datetime import datetime
 from security.authentication import create_employee_access_token
@@ -23,24 +22,24 @@ class EmployeeSigninController(object):
         payload = request.get_json()
         needed_parameters = ["login", "passwd"]
         if(not all(elem in payload for elem in needed_parameters)):
-            return MISSING_PARAMETER
+            return http_response.MISSING_PARAMETER
         login = payload["login"]
         passwd = payload["passwd"]
         user = User.get(login)
         if((not user) or (not check_password(passwd, user["salt"], user["passwd"]))):
-            return NOT_AUTHORIZED
+            return http_response.NOT_AUTHORIZED
         encoded_jwt = create_employee_access_token(user["login"])
         json_response = json.dumps({"status" : "success", "jwt": encoded_jwt.decode()})
         resp = Response(json_response)
         resp.set_cookie("refresh_token", value = create_employee_refresh_token(user["login"]), httponly = True, 
                         secure = True, domain=".matheusgirardin.com", samesite='Lax', max_age=24*60*60)
-        return resp,200,DEFAULT_HEADERS
+        return resp, 200, http_response.DEFAULT_HEADERS
 
 class EmployeeRefreshController(object):
     def get(self, request):
         refresh_token = request.cookies.get('refresh_token')
         is_valid, user = validate_employee_refresh_token(refresh_token)
         if(not is_valid):
-            return json.dumps({"status": "error", "error" : "NotValidRefreshToken"}),401,DEFAULT_HEADERS
+            return json.dumps({"status": "error", "error" : "NotValidRefreshToken"}),401,http_response.DEFAULT_HEADERS
         encoded_jwt = create_employee_access_token(user)
-        return json.dumps({"access_token": encoded_jwt.decode()}), 200, DEFAULT_HEADERS
+        return json.dumps({"access_token": encoded_jwt.decode()}), 200, http_response.DEFAULT_HEADERS

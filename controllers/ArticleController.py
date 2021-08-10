@@ -1,30 +1,29 @@
-import os
 import json
-import constants.http_response
-from dal import Article
+from constants import http_response
+from dal import ArticleDao
 
 class ArticleController(object):
     def get(self, request):
         if(not request.args or "id" not in request.args):
-            return MISSING_PARAMETER
+            return http_response.MISSING_PARAMETER
         id = request.args.get('id')
         try:
-            article = Article.get(id)
+            article = ArticleDao.get(id)
             if(article == None):
                 article = {"status": "error"}
             def converter(o):
                 return o.__str__()
-            return json.dumps(article, default=converter), 200, DEFAULT_HEADERS
+            return json.dumps(article, default=converter), 200, http_response.DEFAULT_HEADERS
         except Exception as e:
             print(e)
-        return json.dumps({"status": "ok"}), 200, DEFAULT_HEADERS
+        return json.dumps({"status": "ok"}), 200, http_response.DEFAULT_HEADERS
 
     def post(self, request):
         payload = request.get_json()
         needed_parameters = ["title", "subtitle", "body", "main_image", "author_name",
             "author_picture", "category", "tags", "time_to_read"]
         if(not all(elem in payload for elem in needed_parameters)):
-            return MISSING_PARAMETER
+            return http_response.MISSING_PARAMETER
 
         title = payload["title"]
         subtitle = payload["subtitle"]
@@ -53,18 +52,18 @@ class ArticleController(object):
             "tags": tags,
             "time_to_read": time_to_read
         }
-        Article.create(post, author, metadata)
-        return json.dumps({"status": "ok"}), 200, DEFAULT_HEADERS
+        ArticleDao.create(post, author, metadata)
+        return json.dumps({"status": "ok"}), 200, http_response.DEFAULT_HEADERS
 
 class ArticlesController(object):
     def get(self, request):
         try:
-            articles = Article.get_all()
+            articles = ArticleDao.get_all()
             if(articles == None):
                 articles = ""
             def converter(o):
                 return o.__str__()
-            return json.dumps({"articles": articles}, default=converter), 200, DEFAULT_HEADERS
+            return json.dumps({"articles": articles}, default=converter), 200, http_response.DEFAULT_HEADERS
         except Exception as e:
             print(e)
-        return json.dumps({"articles": articles}), 200, DEFAULT_HEADERS
+        return json.dumps({"articles": articles}), 200, http_response.DEFAULT_HEADERS
