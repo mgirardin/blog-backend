@@ -1,7 +1,9 @@
-from article_content import ArticleContent 
-from comment import Comment
 from datetime import datetime
 from typing import List
+
+from article_content import ArticleContent
+from comment import Comment
+
 
 class Article(object):
     content: ArticleContent
@@ -14,16 +16,18 @@ class Article(object):
     created_on: datetime
     views: int
 
-    def __init__(self, 
-    content: ArticleContent, 
-    author_name: str, 
-    author_picture: str, 
-    category: str,
-    tags: List[str],
-    time_to_read: str,
-    comments: List[Comment],
-    created_on: datetime,
-    views: int) -> None:
+    def __init__(
+        self,
+        content: ArticleContent,
+        author_name: str,
+        author_picture: str,
+        category: str,
+        tags: List[str],
+        time_to_read: str,
+        comments: List[Comment],
+        created_on: datetime,
+        views: int,
+    ) -> None:
         self.content = content
         self.author_name = author_name
         self.author_picture = author_picture

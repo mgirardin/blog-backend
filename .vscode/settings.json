@@ -1,0 +1,11 @@
+{
+    "python.linting.enabled": true,
+    "python.sortImports.args": ["-rc", "--atomic"],
+    "[python]": {
+        "editor.formatOnSave": true,
+        "editor.codeActionsOnSave": {
+            "source.organizeImports": true,
+        },
+    },
+    "python.formatting.provider": "black"
+}

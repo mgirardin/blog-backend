@@ -1,8 +1,10 @@
 import json
+
 from constants import http_response
 from dal.subscriber_dao import SubscriberDao
 from messages.subscriber import Subscriber
 from security.recaptcha import handle_captcha_token
+
 
 class SubscriberController(object):
     def post(self, request):

@@ -1,6 +1,8 @@
-from google.cloud import firestore
 from typing import Union
-from messages.user import User 
+
+from google.cloud import firestore
+from messages.user import User
+
 client = firestore.Client()
 
 class UserDao:
