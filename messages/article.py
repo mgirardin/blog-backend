@@ -1,8 +1,8 @@
 from datetime import datetime
 from typing import List
 
-from article_content import ArticleContent
-from comment import Comment
+from messages.article_content import ArticleContent
+from messages.comment import Comment
 
 
 class Article(object):
