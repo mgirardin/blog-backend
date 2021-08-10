@@ -1,6 +1,6 @@
 import os
 import json
-import http_response
+import constants.http_response
 from flask import Response
 from datetime import datetime
 from security.authentication import create_employee_access_token

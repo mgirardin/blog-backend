@@ -1,6 +1,6 @@
 import os
 import json
-import http_response
+import constants.http_response
 from dal import Subscriber
 from security.recaptcha import handle_captcha_token
 

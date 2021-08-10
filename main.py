@@ -1,13 +1,10 @@
 import json 
+import constants.http_response
 from security import cors
 from controllers.ArticleController import ArticleController, ArticlesController
 from controllers.AdminController import EmployeeSigninController, EmployeeRefreshController
 from controllers.SubscriberController import SubscriberController
 from controllers.ContactController import ContactController
-
-DEFAULT_HEADERS = {
-    "content-type" : "application/json",
-}
 
 def routes():
     routes = {
