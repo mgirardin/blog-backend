@@ -5,6 +5,6 @@ cffi==1.14.0
 dataclasses==0.6
 google-cloud-firestore
 pycparser==2.20
-pyjwt==1.7.1
+pyjwt==2.4.0
 scramp==1.1.1
 six==1.14.0
